@@ -235,25 +235,25 @@ def main() -> int:
                 log(f"İndirme hatası: {candidate['url']} | {exc}")
                 continue
 
-            if not video_path:
+                        if not video_path:
                 log(f"Video indirilemedi veya uygun değil: {candidate['url']}")
                 continue
 
             log(f"Gönderiliyor: {video_path.name}")
 
-try:
-    facebook_sent = send_to_facebook(video_path, candidate)
-except Exception as exc:
-    log(f"Facebook gönderim hatası: {exc}")
-    facebook_sent = False
+            try:
+                facebook_sent = send_to_facebook(video_path, candidate)
+            except Exception as exc:
+                log(f"Facebook gönderim hatası: {exc}")
+                facebook_sent = False
 
-try:
-    telegram_sent = send_to_telegram(video_path, candidate)
-except Exception as exc:
-    log(f"Telegram gönderim hatası: {exc}")
-    telegram_sent = False
+            try:
+                telegram_sent = send_to_telegram(video_path, candidate)
+            except Exception as exc:
+                log(f"Telegram gönderim hatası: {exc}")
+                telegram_sent = False
 
-sent = facebook_sent or telegram_sent
+            sent = facebook_sent or telegram_sent
 
             if sent:
                 posted.add(unique_key)
@@ -267,6 +267,7 @@ sent = facebook_sent or telegram_sent
             try:
                 video_path.unlink(missing_ok=True)
             except Exception:
+                pass
                 pass
 
     save_posted(posted_data)

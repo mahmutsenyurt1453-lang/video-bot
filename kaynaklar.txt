@@ -1,7 +1,5 @@
-# Buraya kaynak linkleri yazılacak.
-# Her satıra 1 kaynak.
-# Örnekler:
-# https://www.youtube.com/@KANAL_ADI/shorts
-# https://www.youtube.com/playlist?list=PLAYLIST_ID
-# https://www.youtube.com/watch?v=VIDEO_ID
-
+https://www.youtube.com/@NASA/videos
+https://www.youtube.com/@BBCEarth/videos
+https://www.youtube.com/@NatGeo/videos
+https://www.youtube.com/@TwoMinutePapers/videos
+https://www.youtube.com/@TheAIGRID/videos

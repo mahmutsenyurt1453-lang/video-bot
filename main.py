@@ -143,11 +143,26 @@ def download_video(candidate: Dict[str, str]) -> Optional[Path]:
     return path
 
 
+def build_caption(candidate: Dict[str, str]) -> str:
+    title = candidate["title"]
+
+    hashtags = [
+        "#RealhupTV",
+        "#ViralVideo",
+        "#Nature",
+        "#Animals",
+        "#Explore",
+    ]
+
+    caption = title + "\n\n" + " ".join(hashtags)
+    return caption[:900]
+
+
 def send_to_telegram(video_path: Path, candidate: Dict[str, str]) -> bool:
     if not BOT_TOKEN or not CHAT_ID:
         raise RuntimeError("TELEGRAM_BOT_TOKEN ve TELEGRAM_CHAT_ID secret olarak eklenmeli.")
 
-    caption = candidate["title"][:900]
+    caption = build_caption(candidate)
     api_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendVideo"
 
     with video_path.open("rb") as f:
@@ -163,10 +178,13 @@ def send_to_telegram(video_path: Path, candidate: Dict[str, str]) -> bool:
         )
 
     if response.ok:
+        log("Telegram'a gönderildi.")
         return True
 
     log(f"Telegram sendVideo hatası: {response.status_code} {response.text[:500]}")
     return False
+
+
 def send_to_facebook(video_path: Path, candidate: Dict[str, str]) -> bool:
     if not FACEBOOK_PAGE_ID or not FACEBOOK_PAGE_TOKEN:
         raise RuntimeError(
@@ -180,7 +198,7 @@ def send_to_facebook(video_path: Path, candidate: Dict[str, str]) -> bool:
             url,
             data={
                 "access_token": FACEBOOK_PAGE_TOKEN,
-                "description": candidate["title"],
+                "description": build_caption(candidate),
             },
             files={"source": f},
             timeout=600,

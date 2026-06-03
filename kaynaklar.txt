@@ -1,0 +1,7 @@
+# Buraya kaynak linkleri yazılacak.
+# Her satıra 1 kaynak.
+# Örnekler:
+# https://www.youtube.com/@KANAL_ADI/shorts
+# https://www.youtube.com/playlist?list=PLAYLIST_ID
+# https://www.youtube.com/watch?v=VIDEO_ID
+

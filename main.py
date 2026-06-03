@@ -15,7 +15,8 @@ DOWNLOAD_DIR = ROOT / "downloads"
 
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
-
+FACEBOOK_PAGE_ID = os.getenv("FACEBOOK_PAGE_ID", "").strip()
+FACEBOOK_PAGE_TOKEN = os.getenv("FACEBOOK_PAGE_TOKEN", "").strip()
 MAX_SCAN_PER_SOURCE = int(os.getenv("MAX_SCAN_PER_SOURCE", "8"))
 MAX_POSTS_PER_RUN = int(os.getenv("MAX_POSTS_PER_RUN", "20"))
 MAX_VIDEO_MB = int(os.getenv("MAX_VIDEO_MB", "45"))
@@ -166,7 +167,34 @@ def send_to_telegram(video_path: Path, candidate: Dict[str, str]) -> bool:
 
     log(f"Telegram sendVideo hatası: {response.status_code} {response.text[:500]}")
     return False
+def send_to_facebook(video_path: Path, candidate: Dict[str, str]) -> bool:
+    if not FACEBOOK_PAGE_ID or not FACEBOOK_PAGE_TOKEN:
+        raise RuntimeError(
+            "FACEBOOK_PAGE_ID ve FACEBOOK_PAGE_TOKEN secret olarak eklenmeli."
+        )
 
+    url = f"https://graph-video.facebook.com/{FACEBOOK_PAGE_ID}/videos"
+
+    with video_path.open("rb") as f:
+        response = requests.post(
+            url,
+            data={
+                "access_token": FACEBOOK_PAGE_TOKEN,
+                "description": candidate["title"],
+            },
+            files={"source": f},
+            timeout=600,
+        )
+
+    if response.ok:
+        log("Facebook'a gönderildi.")
+        return True
+
+    log(
+        f"Facebook video yükleme hatası: "
+        f"{response.status_code} {response.text[:500]}"
+    )
+    return False
 
 def main() -> int:
     posted_data = load_posted()
@@ -214,7 +242,7 @@ def main() -> int:
             log(f"Telegram'a gönderiliyor: {video_path.name}")
 
             try:
-                sent = send_to_telegram(video_path, candidate)
+                sent = send_to_facebook(video_path, candidate)
             except Exception as exc:
                 log(f"Telegram gönderim hatası: {exc}")
                 sent = False

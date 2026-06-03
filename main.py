@@ -235,7 +235,7 @@ def main() -> int:
                 log(f"İndirme hatası: {candidate['url']} | {exc}")
                 continue
 
-                        if not video_path:
+            if not video_path:
                 log(f"Video indirilemedi veya uygun değil: {candidate['url']}")
                 continue
 
@@ -267,7 +267,6 @@ def main() -> int:
             try:
                 video_path.unlink(missing_ok=True)
             except Exception:
-                pass
                 pass
 
     save_posted(posted_data)

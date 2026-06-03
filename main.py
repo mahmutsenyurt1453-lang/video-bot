@@ -17,7 +17,7 @@ BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
 
 MAX_SCAN_PER_SOURCE = int(os.getenv("MAX_SCAN_PER_SOURCE", "8"))
-MAX_POSTS_PER_RUN = int(os.getenv("MAX_POSTS_PER_RUN", "2"))
+MAX_POSTS_PER_RUN = int(os.getenv("MAX_POSTS_PER_RUN", "20"))
 MAX_VIDEO_MB = int(os.getenv("MAX_VIDEO_MB", "45"))
 
 
